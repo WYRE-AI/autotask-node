@@ -4,6 +4,7 @@ export interface AutotaskAuth {
   secret: string;
   apiUrl?: string; // Optional override
   skipConnectionTest?: boolean; // Skip the /Version connectivity check (useful in gateway/stateless mode)
+  impersonationResourceId?: number; // Optional: Autotask Resource ID to impersonate (ImpersonationResourceId header)
 }
 
 /**

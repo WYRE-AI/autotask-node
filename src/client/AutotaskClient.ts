@@ -272,6 +272,24 @@ export class AutotaskClient {
 
     // If no config is provided, try to use environment variables
     if (!config) {
+      const rawImpersonationId = process.env.AUTOTASK_IMPERSONATION_RESOURCE_ID;
+      let impersonationResourceId: number | undefined;
+      if (
+        rawImpersonationId !== undefined &&
+        rawImpersonationId.trim() !== ''
+      ) {
+        impersonationResourceId = Number(rawImpersonationId);
+        if (
+          !Number.isInteger(impersonationResourceId) ||
+          impersonationResourceId <= 0
+        ) {
+          throw new ConfigurationError(
+            `AUTOTASK_IMPERSONATION_RESOURCE_ID must be a positive integer, got "${rawImpersonationId}"`,
+            'impersonationResourceId'
+          );
+        }
+      }
+
       // Support both naming conventions for environment variables
       config = {
         username:
@@ -281,6 +299,10 @@ export class AutotaskClient {
           process.env.AUTOTASK_API_INTEGRATION_CODE!,
         secret: process.env.AUTOTASK_SECRET || process.env.AUTOTASK_API_SECRET!,
         apiUrl: process.env.AUTOTASK_API_URL,
+        impersonationResourceId:
+          impersonationResourceId === undefined
+            ? undefined
+            : impersonationResourceId,
       };
 
       if (!config.username || !config.integrationCode || !config.secret) {
@@ -410,6 +432,9 @@ export class AutotaskClient {
         ApiIntegrationCode: config.integrationCode,
         UserName: config.username,
         Secret: config.secret,
+        ...(config.impersonationResourceId && {
+          ImpersonationResourceId: String(config.impersonationResourceId),
+        }),
       },
       transformRequest: [
         (data, headers) => {

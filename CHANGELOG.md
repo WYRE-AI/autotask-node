@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- **API impersonation support** - new `impersonationResourceId` config option (or `AUTOTASK_IMPERSONATION_RESOURCE_ID` env var) adds the `ImpersonationResourceId` header to API requests, allowing impersonation of a specific resource.
+
 ### Changed
 
 - Repository hygiene: stopped tracking the generated `dist/` build tree in git (`.gitignore` already excludes it).

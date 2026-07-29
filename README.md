@@ -41,6 +41,7 @@ const client = await AutotaskClient.create({
   username: 'your-api-user@domain.com',
   integrationCode: 'YOUR_INTEGRATION_CODE',
   secret: 'YOUR_SECRET',
+  // impersonationResourceId: 12345 // impersonate a resource
 });
 
 // Create a ticket
@@ -189,6 +190,7 @@ The SDK uses Autotask's header-based authentication with three required headers:
 - `ApiIntegrationCode`: Your Autotask API integration code
 - `UserName`: Your API username (email address)
 - `Secret`: Your API secret/password
+- `ImpersonationResourceId` : This header is only set if the `impersonationResourceId` configuration option is included
 
 **Note:** This SDK does NOT use Basic Authentication. All credentials are sent as separate headers as required by the Autotask REST API.
 
@@ -199,6 +201,8 @@ The SDK uses Autotask's header-based authentication with three required headers:
 export AUTOTASK_USERNAME="your-api-user@domain.com"
 export AUTOTASK_INTEGRATION_CODE="YOUR_INTEGRATION_CODE"
 export AUTOTASK_SECRET="YOUR_SECRET"
+# Optional to enable impersonation
+export AUTOTASK_IMPERSONATION_RESOURCE_ID="12345"
 ```
 
 Or create a `.env` file:
@@ -687,6 +691,9 @@ LOG_LEVEL=info
 AUDIT_LOGS_ENABLED=true
 PERFORMANCE_LOGS_ENABLED=true
 SECURITY_LOGS_ENABLED=true
+
+# Impersonation
+AUTOTASK_IMPERSONATION_RESOURCE_ID=RESOURCE_ID
 ```
 
 ### Logging and Debugging
@@ -716,10 +723,10 @@ const client = await AutotaskClient.create({
 
 Autotask enforces two hard limits documented in their [API Rate Limiting guide](https://autotask.net/help/DeveloperHelp/Content/AdminSetup/2ExtensionsIntegrations/APIs/REST/API_Rate_Limiting.htm):
 
-| Limit | Value | Scope |
-|-------|-------|-------|
-| Concurrent threads per endpoint | **3** | Per API tracking identifier |
-| Total requests per hour | **10,000** | Per Autotask tenant database |
+| Limit                           | Value      | Scope                        |
+| ------------------------------- | ---------- | ---------------------------- |
+| Concurrent threads per endpoint | **3**      | Per API tracking identifier  |
+| Total requests per hour         | **10,000** | Per Autotask tenant database |
 
 The SDK automatically respects the 3-thread limit. When more than 3 requests target the same endpoint simultaneously, additional requests are queued and released as slots free up — no 429 errors for concurrency violations.
 
@@ -735,6 +742,7 @@ Team B → integrationCode: TEAM_B_CODE → 3 threads per endpoint (independent)
 ```
 
 To create a dedicated API user:
+
 1. **Admin > Resources (Users) > Resources/Users** → Add Resource
 2. Set Security Level to **API User**
 3. Note the generated credentials (username, secret, integration code)
