@@ -34,6 +34,18 @@ updates:
       # tsup/DTS toolchain support TS7.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # uuid is force-pinned via package.json's top-level `overrides` (added in #175,
+      # to push the patched ^14.0.0 through bull/exceljs/jest-junit transitives that
+      # otherwise pull an older, vulnerable uuid). npm requires an EXACT string match
+      # between `dependencies.uuid` and `overrides.uuid` for a package that is both a
+      # direct dependency and a top-level override target -- Dependabot's own update
+      # job bumps only the override (to a literal pinned version) without touching the
+      # direct-dependency range in the same pass, which trips npm's EOVERRIDE check
+      # every time ("Override for uuid@X conflicts with direct dependency"), 2026-08-13
+      # and 2026-08-17. Ignoring uuid here stops that recurring job failure; bumping
+      # uuid going forward means manually updating both dependencies.uuid AND
+      # overrides.uuid to the same value in one commit.
+      - dependency-name: "uuid"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
