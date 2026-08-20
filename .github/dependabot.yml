@@ -34,6 +34,17 @@ updates:
       # tsup/DTS toolchain support TS7.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # uuid is both a direct dependency AND a top-level override (added in #175 to
+      # force any transitive uuid usage up to the patched v14 line, alongside the
+      # brace-expansion/diff overrides above -- a real security-hardening pin, not
+      # vestigial). npm requires a top-level override for a package that's also a
+      # direct dependency to match EXACTLY, so any Dependabot attempt to bump the
+      # override alone (independent of the dependencies entry) throws EOVERRIDE and
+      # fails the whole production-minor-patch group's recreate job -- reproduced
+      # 2026-08-13 and 2026-08-17 (npm error: "Override for uuid@14.0.1 conflicts
+      # with direct dependency"). Bump uuid manually (both dependencies AND
+      # overrides, same value) instead of via Dependabot.
+      - dependency-name: "uuid"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
