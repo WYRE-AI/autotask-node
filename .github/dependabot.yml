@@ -34,6 +34,15 @@ updates:
       # tsup/DTS toolchain support TS7.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # uuid is BOTH a direct dependency and a top-level `overrides` entry (added
+      # together in the uuid 11->14 major bump -- the override is load-bearing,
+      # forcing bull/exceljs's own transitive uuid deps up to 14.x instead of
+      # resolving independently to 8.3.2; do NOT remove it as "redundant").
+      # npm requires the two fields to match EXACTLY, not just range-compatibly,
+      # so Dependabot's grouped update tries to bump the override alone and fails
+      # with dependency_file_not_resolvable. Ignored here; bump both fields
+      # manually together when a real update is needed (task_1787660405923_49563022).
+      - dependency-name: "uuid"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
