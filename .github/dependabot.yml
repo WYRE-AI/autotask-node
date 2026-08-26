@@ -43,6 +43,27 @@ updates:
       # with dependency_file_not_resolvable. Ignored here; bump both fields
       # manually together when a real update is needed (task_1787660405923_49563022).
       - dependency-name: "uuid"
+      # Nested-unreachable inside npm's own bundled dependency tree (same shape
+      # as ip-address above and the node-halopsa/7-repo-batch fixes 2026-08-25):
+      # every vulnerable copy of these lives under node_modules/npm/node_modules/,
+      # not reachable from top-level dependency management. tar's top-level copy
+      # (node_modules/tar) and undici's top-level + other-nested copies are
+      # already on patched versions -- only the npm-bundled copy is stuck.
+      # @sigstore/core, @sigstore/verify, and sigstore have NO copy outside
+      # npm's bundled tree at all. Triaged during the 2026-08-26 open-alerts pass
+      # (task_1787194027987_81046423). Revisit once npm bundles patched versions.
+      - dependency-name: "tar"
+      - dependency-name: "undici"
+      - dependency-name: "@sigstore/core"
+      - dependency-name: "@sigstore/verify"
+      - dependency-name: "sigstore"
+      # brace-expansion has a SPLIT shape: the reachable top-level copy (2.x line)
+      # is fixed directly in this same pass (2.1.0 -> patched), but a second,
+      # unrelated vulnerable copy (5.x line, node_modules/npm/node_modules/) is
+      # nested-unreachable the same way as the packages above. Ignored so
+      # Dependabot doesn't keep trying and failing to bump the unreachable copy
+      # after the reachable one is already fixed manually.
+      - dependency-name: "brace-expansion"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
