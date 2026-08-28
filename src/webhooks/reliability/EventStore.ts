@@ -321,7 +321,7 @@ export class EventStore extends EventEmitter implements IEventStore {
 
   public async getByFilter(filter: EventStoreFilter): Promise<WebhookEvent[]> {
     const startTime = Date.now();
-    let eventIds: Set<string> = new Set();
+    let eventIds: Set<string>;
 
     try {
       // Use index for efficient filtering if available
@@ -402,7 +402,6 @@ export class EventStore extends EventEmitter implements IEventStore {
       candidateIds = firstFilter
         ? dateIds
         : this.intersect(candidateIds, dateIds);
-      firstFilter = false;
     }
 
     return candidateIds;

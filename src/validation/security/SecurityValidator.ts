@@ -729,7 +729,7 @@ export class SecurityValidator {
       return 'ENC:' + CryptoJS.AES.encrypt(value, this.encryptionKey).toString();
     } catch (error) {
       this.logger.error('Encryption error:', error);
-      throw new Error('Failed to encrypt value');
+      throw new Error('Failed to encrypt value', { cause: error });
     }
   }
 

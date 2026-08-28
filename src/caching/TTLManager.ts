@@ -324,7 +324,7 @@ export class TTLManager {
                            hour >= this.businessHours.startHour &&
                            hour < this.businessHours.endHour;
 
-    let ttlMultiplier = 1;
+    let ttlMultiplier: number;
     let confidence = 0.7;
     let reason: string;
 

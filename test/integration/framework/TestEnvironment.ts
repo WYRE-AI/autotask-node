@@ -135,7 +135,7 @@ export class TestEnvironment {
       // Test basic connectivity with a simple list operation
       await this.client.version.list({ pageSize: 1 });
     } catch (error) {
-      throw new Error(`Connection validation failed: ${error}`);
+      throw new Error(`Connection validation failed: ${error}`, { cause: error });
     }
   }
 

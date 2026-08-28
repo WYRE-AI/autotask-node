@@ -539,7 +539,7 @@ export class SmartLoadingEngine {
     }
 
     // Execute query based on relationship type
-    let relatedData: any[] = [];
+    let relatedData: any[];
 
     try {
       switch (relationship.relationshipType) {
@@ -562,7 +562,7 @@ export class SmartLoadingEngine {
       }
 
     } catch (error) {
-      throw new Error(`Failed to load ${relationshipName}: ${(error as Error).message}`);
+      throw new Error(`Failed to load ${relationshipName}: ${(error as Error).message}`, { cause: error });
     }
 
     return relatedData;

@@ -18,9 +18,6 @@ jobs:
     strategy:
       matrix:
         include:
-          # Minimum supported version
-          - node-version: '18.x'
-            os: ubuntu-latest
           # LTS version (most important)
           - node-version: '20.x'
             os: ubuntu-latest
