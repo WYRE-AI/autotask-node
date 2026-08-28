@@ -48,7 +48,7 @@ export class AutotaskAuthManager {
       logger.info('Autotask connection initialized successfully');
     } catch (error) {
       logger.error('Failed to initialize Autotask connection:', error);
-      throw new Error(`Autotask authentication failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(`Autotask authentication failed: ${error instanceof Error ? error.message : 'Unknown error'}`, { cause: error });
     }
   }
 

@@ -466,7 +466,8 @@ export class ValidationDecorators {
             }
           } catch (error) {
             throw new Error(
-              `Validation error: ${error instanceof Error ? error.message : String(error)}`
+              `Validation error: ${error instanceof Error ? error.message : String(error)}`,
+              { cause: error }
             );
           }
         }

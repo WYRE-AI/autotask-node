@@ -852,7 +852,7 @@ export class FileCacheStore implements ICacheStore {
    */
   private async performCleanup(): Promise<number> {
     const now = Date.now();
-    let deletedCount = 0;
+    let deletedCount: number;
     const expiredKeys: string[] = [];
 
     // Find expired keys
