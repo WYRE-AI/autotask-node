@@ -16,6 +16,11 @@
 
 - Deleted stray artifacts from the working tree: `autotask-node-2.0.0.tgz`, `npm-debug-403.log`, and the empty `logs/` directory.
 
+### Fixed
+
+- **Cleared the 17 real ESLint errors (`preserve-caught-error`, `no-useless-assignment`) that a bumped `eslint`/`@typescript-eslint/eslint-plugin` devDependency newly surfaces on pre-existing code, blocking dependabot dev-dependency PRs (#233 and any future bump hitting the same two rules).** 8 `preserve-caught-error` sites now attach `{ cause: <caughtError> }` to the re-thrown `Error`. 8 `no-useless-assignment` sites were genuine dead stores (a `let` initializer or intermediate assignment never read before being overwritten or falling out of scope) and had the dead assignment removed. One site (`test/base.test.ts`, a `WeakRef` GC test) is an intentional false positive — nulling the variable has a real side effect (dropping the last strong reference so `global.gc()` can collect it) even though the linter can't see a subsequent read — kept via a scoped `eslint-disable-next-line` with an inline explanation rather than removed.
+- Added `ES2022.Error` to `tsconfig.json`'s `lib` array (alongside the existing `ES2021`) — the two-argument `Error(message, { cause })` constructor form needs it for type-checking; `target` is unchanged (still `ES2020`), so output syntax is unaffected.
+
 ### Security
 
 - **Closed GHSA-r292-9mhp-454m (node-tar uncontrolled recursion, high, stack-overflow DoS via crafted long-path tar).** Bundled `tar` (pulled in transitively via the `npm` CLI devDependency, itself pulled in via `@semantic-release/npm`) was at 7.5.19/7.5.20, just short of the 7.5.21 patch. A plain `npm audit fix` (no `--force`) re-resolved `npm` to 11.19.1 (bundled tar 7.5.22) within the existing declared range — lockfile-only change, no `package.json`/direct-dependency edits, no semver-major bump. `npm audit`'s own suggested remediation path (`semantic-release@24.2.9`, flagged `isSemVerMajor`) was a red herring — the currently-resolved `semantic-release` (25.0.3, newer than that suggestion) was never at risk and is unchanged by this fix.

@@ -58,7 +58,7 @@ export default async function globalSetup(): Promise<void> {
       console.log('✅ API connection successful');
     } catch (error) {
       console.error('❌ API connection failed:', error);
-      throw new Error('API connection validation failed');
+      throw new Error('API connection validation failed', { cause: error });
     }
     
     // Store global instances

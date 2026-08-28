@@ -387,7 +387,7 @@ async function loadConfig(): Promise<MigrationConfig> {
     const configContent = await fs.readFile(configPath, 'utf8');
     return JSON.parse(configContent);
   } catch (error) {
-    throw new Error(`Failed to load configuration from ${configPath}. Run 'autotask-migrate init' first.`);
+    throw new Error(`Failed to load configuration from ${configPath}. Run 'autotask-migrate init' first.`, { cause: error });
   }
 }
 

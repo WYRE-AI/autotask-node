@@ -55,7 +55,7 @@ class EntityGenerator {
       const data = fs.readFileSync(this.dataFile, 'utf8');
       return JSON.parse(data) as EntitiesData;
     } catch (error) {
-      throw new Error(`Failed to load entity data: ${error}`);
+      throw new Error(`Failed to load entity data: ${error}`, { cause: error });
     }
   }
 

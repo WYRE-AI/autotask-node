@@ -759,7 +759,10 @@ describe('BaseEntity - Comprehensive Tests', () => {
 
       await testEntity.testExecuteRequest(requestFn, '/test', 'GET');
 
-      requestFn = null; // Remove our reference
+      // Intentional dead-looking store: drops the last strong reference so
+      // `global.gc()` below can actually collect it for the WeakRef check.
+      // eslint-disable-next-line no-useless-assignment
+      requestFn = null;
       
       // Force garbage collection if available (for testing environments)
       if (global.gc) {

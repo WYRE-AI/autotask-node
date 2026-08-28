@@ -302,8 +302,8 @@ export class ConnectionPoolMonitor extends EventEmitter {
     // In a real implementation, this would query actual HTTP agents
     // For now, we'll simulate metrics based on recorded events
     
-    let totalConnections = 0;
-    let activeConnections = 0;
+    let totalConnections: number;
+    let activeConnections: number;
     let connectionsCreated = 0;
     let connectionsDestroyed = 0;
     let totalAcquisitionTime = 0;
