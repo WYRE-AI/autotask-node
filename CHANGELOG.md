@@ -18,7 +18,8 @@
 
 ### Security
 
-- `npm audit fix` cleared 2 of 4 moderate advisories. The remaining 2 (`brace-expansion`, `ip-address`) live in the bundled `npm` CLI pulled in transitively and require a breaking `--force` change to resolve.
+- **Closed GHSA-r292-9mhp-454m (node-tar uncontrolled recursion, high, stack-overflow DoS via crafted long-path tar).** Bundled `tar` (pulled in transitively via the `npm` CLI devDependency, itself pulled in via `@semantic-release/npm`) was at 7.5.19/7.5.20, just short of the 7.5.21 patch. A plain `npm audit fix` (no `--force`) re-resolved `npm` to 11.19.1 (bundled tar 7.5.22) within the existing declared range — lockfile-only change, no `package.json`/direct-dependency edits, no semver-major bump. `npm audit`'s own suggested remediation path (`semantic-release@24.2.9`, flagged `isSemVerMajor`) was a red herring — the currently-resolved `semantic-release` (25.0.3, newer than that suggestion) was never at risk and is unchanged by this fix.
+- Correcting the note above (added 2026-05-20): the 2 remaining moderate advisories it described as needing a breaking `--force` change (`brace-expansion`, `ip-address`) are also resolved now — same non-force `npm audit fix`, same transitive-`npm`-CLI path. `npm audit` reports 0 vulnerabilities as of this change.
 
 ## [2.2.1] - 2026-04-28
 
