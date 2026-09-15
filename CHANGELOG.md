@@ -23,6 +23,7 @@
 
 ### Security
 
+- **Resolved js-yaml high-severity advisory CVE-2026-84375** (fixed in js-yaml >= 4.3.2 on the 4.x line and >= 3.15.2 on the 3.x line). js-yaml is only a transitive devDependency here — pulled on the 4.x line via `cosmiconfig` and on the 3.x line via `@istanbuljs/load-nyc-config`. Added scoped npm `overrides` (`cosmiconfig` → `js-yaml ^4.3.2`, `@istanbuljs/load-nyc-config` → `js-yaml ^3.15.2`) so each consumer stays on its own patched line. `npm audit` reports 0 vulnerabilities.
 - **Closed GHSA-r292-9mhp-454m (node-tar uncontrolled recursion, high, stack-overflow DoS via crafted long-path tar).** Bundled `tar` (pulled in transitively via the `npm` CLI devDependency, itself pulled in via `@semantic-release/npm`) was at 7.5.19/7.5.20, just short of the 7.5.21 patch. A plain `npm audit fix` (no `--force`) re-resolved `npm` to 11.19.1 (bundled tar 7.5.22) within the existing declared range — lockfile-only change, no `package.json`/direct-dependency edits, no semver-major bump. `npm audit`'s own suggested remediation path (`semantic-release@24.2.9`, flagged `isSemVerMajor`) was a red herring — the currently-resolved `semantic-release` (25.0.3, newer than that suggestion) was never at risk and is unchanged by this fix.
 - Correcting the note above (added 2026-05-20): the 2 remaining moderate advisories it described as needing a breaking `--force` change (`brace-expansion`, `ip-address`) are also resolved now — same non-force `npm audit fix`, same transitive-`npm`-CLI path. `npm audit` reports 0 vulnerabilities as of this change.
 
