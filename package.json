@@ -93,7 +93,7 @@
     "crypto-js": "^4.2.0",
     "csv-parse": "^7.0.3",
     "dompurify": "^3.4.16",
-    "dotenv": "^17.2.3",
+    "dotenv": "^18.0.5",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
