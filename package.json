@@ -97,7 +97,7 @@
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
-    "glob": "^13.0.6",
+    "glob": "^14.0.2",
     "ioredis": "^5.10.1",
     "joi": "^18.2.9",
     "jsdom": "^29.1.1",
