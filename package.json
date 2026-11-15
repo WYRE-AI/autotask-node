@@ -59,11 +59,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wyre-technology/autotask-node.git"
+    "url": "git+https://github.com/WYRE-AI/autotask-node.git"
   },
   "homepage": "https://github.com/wyre-technology/autotask-node#readme",
   "bugs": {
-    "url": "https://github.com/wyre-technology/autotask-node/issues"
+    "url": "https://github.com/WYRE-AI/autotask-node/issues"
   },
   "keywords": [
     "autotask",
