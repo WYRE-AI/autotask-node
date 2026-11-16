@@ -8,6 +8,7 @@
 
 ### Changed
 
+- **Release flow under branch-protected `main`:** Manual Release requires `acknowledge=true` for production runs, opens a `release/vX.Y.Z` PR (no direct push to `main`), pushes the tag, and publishes by calling `release.yml` via `workflow_call` (GITHUB_TOKEN tag pushes do not start push-triggered workflows). Local `release:patch|minor|major` scripts prepare a release branch + tag instead of `git push origin main --tags`. Removed `@semantic-release/git`.
 - Repository hygiene: stopped tracking the generated `dist/` build tree in git (`.gitignore` already excludes it).
 - Set `package.json` `author` to `Wyre Technology` (was a placeholder).
 - Added `*.tgz` to `.gitignore` to keep build tarballs out of the working tree.
@@ -23,6 +24,10 @@
 
 ### Security
 
+- **Cleared Dependabot-class Critical and High advisories** (`npm audit` now 0 critical / 0 high):
+  - Critical: `dompurify` → `^3.4.18` ([GHSA-cg2g-xh64-v4q7](https://github.com/advisories/GHSA-cg2g-xh64-v4q7)); `proxy-addr` override → `^2.0.8` ([GHSA-jqcg-44mw-7w3h](https://github.com/advisories/GHSA-jqcg-44mw-7w3h))
+  - High: `body-parser` → `^2.4.0` ([GHSA-27r3-jxmh-p828](https://github.com/advisories/GHSA-27r3-jxmh-p828)); `brace-expansion` → `^2.1.7` / nested `npm` `^5.0.12`; `follow-redirects` → `^1.16.3`; `joi` → `^18.3.2` ([GHSA-4528-x5fx-h6hg](https://github.com/advisories/GHSA-4528-x5fx-h6hg)); `source-map-js` → `^1.2.2` ([GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q)); `undici` → `^6.29.1`
+  - Related overrides: `qs` → `^6.17.1`, `mime` → `4.1.1` (CI `npm audit signatures` / EMISSINGSIGNATUREKEY on 4.1.2)
 - **Resolved js-yaml high-severity advisory CVE-2026-84375** (fixed in js-yaml >= 4.3.2 on the 4.x line and >= 3.15.2 on the 3.x line). js-yaml is only a transitive devDependency here — pulled on the 4.x line via `cosmiconfig` and on the 3.x line via `@istanbuljs/load-nyc-config`. Added scoped npm `overrides` (`cosmiconfig` → `js-yaml ^4.3.2`, `@istanbuljs/load-nyc-config` → `js-yaml ^3.15.2`) so each consumer stays on its own patched line. `npm audit` reports 0 vulnerabilities.
 - **Closed GHSA-r292-9mhp-454m (node-tar uncontrolled recursion, high, stack-overflow DoS via crafted long-path tar).** Bundled `tar` (pulled in transitively via the `npm` CLI devDependency, itself pulled in via `@semantic-release/npm`) was at 7.5.19/7.5.20, just short of the 7.5.21 patch. A plain `npm audit fix` (no `--force`) re-resolved `npm` to 11.19.1 (bundled tar 7.5.22) within the existing declared range — lockfile-only change, no `package.json`/direct-dependency edits, no semver-major bump. `npm audit`'s own suggested remediation path (`semantic-release@24.2.9`, flagged `isSemVerMajor`) was a red herring — the currently-resolved `semantic-release` (25.0.3, newer than that suggestion) was never at risk and is unchanged by this fix.
 - Correcting the note above (added 2026-05-20): the 2 remaining moderate advisories it described as needing a breaking `--force` change (`brace-expansion`, `ip-address`) are also resolved now — same non-force `npm audit fix`, same transitive-`npm`-CLI path. `npm audit` reports 0 vulnerabilities as of this change.
