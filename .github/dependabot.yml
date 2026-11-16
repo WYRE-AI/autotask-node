@@ -1,4 +1,4 @@
-# Canonical Dependabot config for the wyre-technology fleet.
+# Canonical Dependabot config for the WYRE-AI fleet.
 #
 # Goal: keep PR volume manageable. Updates are GROUPED so this repo gets a
 # handful of PRs per week instead of one-per-package. The dependabot-janitor

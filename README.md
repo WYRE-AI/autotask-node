@@ -2,7 +2,7 @@
 
 A TypeScript/Node.js SDK for the Kaseya Autotask PSA REST API with business logic validation, performance optimization, and production monitoring.
 
-[![GitHub package version](https://img.shields.io/github/package-json/v/wyre-technology/autotask-node?label=version)](https://github.com/wyre-technology/autotask-node/packages)
+[![GitHub package version](https://img.shields.io/github/package-json/v/WYRE-AI/autotask-node?label=version)](https://github.com/WYRE-AI/autotask-node/packages)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![API Coverage](https://img.shields.io/badge/API%20Coverage-100%25-brightgreen)](./docs/ENTITIES.md)
@@ -778,7 +778,7 @@ npm run test:coverage       # Coverage report
 5. Submit a pull request
 
 ```bash
-git clone https://github.com/wyre-technology/autotask-node.git
+git clone https://github.com/WYRE-AI/autotask-node.git
 cd autotask-node
 npm install
 cp .env.example .env
@@ -797,7 +797,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/wyre-technology/autotask-node/issues)
+- **Issues**: [GitHub Issues](https://github.com/WYRE-AI/autotask-node/issues)
 - **Documentation**: [docs/](docs/)
 - **Examples**: [docs/EXAMPLES.md](docs/EXAMPLES.md)
 
