@@ -93,32 +93,31 @@ This project uses **tag-based releases** instead of semantic versioning automati
 
 #### Creating Releases
 
-**Option 1: Using npm scripts (Recommended)**
+`main` is branch-protected (required review, enforced for admins). Do **not**
+`git push origin main` for releases — that is rejected (GH006).
+
+**Option 1: Using npm scripts (local prepare)**
 
 ```bash
-# Patch release (1.0.0 → 1.0.1)
-npm run release:patch
+# Patch / minor / major — bumps version, creates release/vX.Y.Z + local tag
+npm run release:patch   # or release:minor / release:major
 
-# Minor release (1.0.0 → 1.1.0)
-npm run release:minor
-
-# Major release (1.0.0 → 2.0.0)
-npm run release:major
+# Then follow the printed steps:
+git push -u origin release/vX.Y.Z
+gh pr create --base main --head release/vX.Y.Z --title "Release vX.Y.Z" --body "..."
+git push origin vX.Y.Z   # human/PAT tag pushes still trigger release.yml
 ```
 
-**Option 2: Manual tagging**
+**Option 2: Manual tagging (from a release branch / PR, not main push)**
 
 ```bash
-# Update version in package.json
 npm version 1.2.3 --no-git-tag-version
-
-# Commit the version change
+git checkout -b release/v1.2.3
 git add package.json package-lock.json
 git commit -m "chore: bump version to 1.2.3"
-
-# Create and push tag
 git tag -a v1.2.3 -m "Release v1.2.3"
-git push origin main
+git push -u origin release/v1.2.3
+gh pr create --base main --head release/v1.2.3 --title "Release v1.2.3"
 git push origin v1.2.3
 ```
 
@@ -127,8 +126,13 @@ git push origin v1.2.3
 1. Go to Actions → Manual Release
 2. Click "Run workflow"
 3. Enter version number (e.g., 1.2.3)
-4. Choose dry-run option if testing
-5. Click "Run workflow"
+4. For a real release: set **acknowledge** to true (required when dry_run is false)
+5. Optional: enable dry-run to validate without publishing
+6. Click "Run workflow"
+
+The workflow opens a `release/vX.Y.Z` PR, pushes the tag, and publishes by
+calling `release.yml` via `workflow_call` (GITHUB_TOKEN tag pushes do not start
+push-triggered workflows).
 
 ### 4. Package.json Configuration
 
