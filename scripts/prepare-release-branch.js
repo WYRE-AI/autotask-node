@@ -48,9 +48,23 @@ if (!status.includes('package.json')) {
   process.exit(1);
 }
 
+const unrelatedStaged = runCapture('git diff --cached --name-only')
+  .split('\n')
+  .filter(
+    file => file && !['package.json', 'package-lock.json'].includes(file)
+  );
+if (unrelatedStaged.length > 0) {
+  console.error(
+    `Error: unrelated staged changes: ${unrelatedStaged.join(', ')}`
+  );
+  process.exit(1);
+}
+
 run(`git checkout -b "${branch}"`);
 run('git add package.json package-lock.json');
-run(`git commit -m "chore: bump version to ${version}"`);
+run(
+  `git commit -m "chore: bump version to ${version}" -- package.json package-lock.json`
+);
 run(`git tag -a "${tag}" -m "Release ${tag}"`);
 
 console.log(`

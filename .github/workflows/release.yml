@@ -4,6 +4,14 @@ on:
   push:
     tags:
       - 'v*'
+  # Allow Manual Release (and other callers) to publish without relying on a
+  # GITHUB_TOKEN tag push, which does not start push-triggered workflows.
+  workflow_call:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g. v1.2.3)'
+        required: true
+        type: string
 
 permissions:
   contents: write # to be able to publish a GitHub release
@@ -17,10 +25,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Resolve tag ref
+        id: tag
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            echo "REF=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+            echo "NAME=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "REF=${GITHUB_REF}" >> "$GITHUB_OUTPUT"
+            echo "NAME=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           fetch-depth: 0
+          ref: ${{ steps.tag.outputs.REF }}
 
       - name: Setup Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
@@ -37,7 +57,9 @@ jobs:
 
       - name: Extract version from tag
         id: extract_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        env:
+          TAG_NAME: ${{ steps.tag.outputs.NAME }}
+        run: echo "VERSION=${TAG_NAME#v}" >> $GITHUB_OUTPUT
 
       - name: Check and update package.json version
         env:
@@ -76,8 +98,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64  # v3.0.3
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          tag_name: ${{ steps.tag.outputs.NAME }}
+          name: Release ${{ steps.tag.outputs.NAME }}
           body_path: release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

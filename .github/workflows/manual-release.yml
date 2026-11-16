@@ -12,19 +12,31 @@ on:
         required: false
         default: false
         type: boolean
+      acknowledge:
+        description: 'Confirm production release (create tag, open PR, publish). Required when dry_run is false.'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
   issues: write
   pull-requests: write
+  packages: write
   id-token: write
 
 jobs:
-  manual-release:
-    name: Manual Release
+  prepare:
+    name: Prepare release branch and tag
     runs-on: ubuntu-latest
 
     steps:
+      - name: Require acknowledgement for production release
+        if: ${{ !inputs.dry_run && !inputs.acknowledge }}
+        run: |
+          echo "Error: set acknowledge=true to perform a real release (or enable dry_run)."
+          exit 1
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -74,14 +86,15 @@ jobs:
         if: ${{ inputs.dry_run }}
         run: |
           echo "DRY RUN: Would open PR release/v${{ inputs.version }} → main with package.json bump"
-          echo "DRY RUN: Would create and push tag v${{ inputs.version }} (triggers release.yml)"
+          echo "DRY RUN: Would create and push tag v${{ inputs.version }}"
+          echo "DRY RUN: Would call release.yml via workflow_call to publish"
           echo "DRY RUN: Would NOT push commits directly to main (branch protection)"
 
       # Under branch protection, GITHUB_TOKEN cannot push commits to main (GH006).
-      # Instead: open a version-bump PR, then push only the annotated tag.
-      # Tag push triggers .github/workflows/release.yml for publish.
+      # Tag pushes with GITHUB_TOKEN also do not start push-triggered workflows, so
+      # publishing is invoked explicitly via workflow_call on the Release workflow.
       - name: Open release PR and push tag
-        if: ${{ !inputs.dry_run }}
+        if: ${{ !inputs.dry_run && inputs.acknowledge }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ inputs.version }}
@@ -115,8 +128,10 @@ jobs:
             echo "\`package.json\` / lockfile version bump for review and merge."
             echo
             echo "### Publishing"
-            echo "Tag \`${TAG}\` was pushed from this release commit and triggers"
-            echo "[\`release.yml\`](.github/workflows/release.yml) (GitHub Release + npm publish)."
+            echo "Tag \`${TAG}\` was pushed, and Manual Release calls"
+            echo "[\`release.yml\`](.github/workflows/release.yml) via \`workflow_call\`"
+            echo "(GitHub Release + npm publish). Tag push alone from \`GITHUB_TOKEN\`"
+            echo "would not start push-triggered workflows."
             echo "Publishing does **not** require this PR to be merged first; merge keeps"
             echo "\`main\`'s version in sync."
             echo
@@ -131,3 +146,17 @@ jobs:
             --body-file /tmp/release-pr-body.md
 
           echo "Opened PR for ${BRANCH}; pushed tag ${TAG}"
+
+  publish:
+    name: Publish release
+    needs: prepare
+    if: ${{ !inputs.dry_run && inputs.acknowledge }}
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: v${{ inputs.version }}
+    secrets: inherit
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      packages: write
