@@ -1,5 +1,5 @@
 {
-  "name": "@wyre-technology/autotask-node",
+  "name": "@wyre-ai/autotask-node",
   "version": "2.3.0",
   "description": "Production-ready Node.js SDK for Kaseya Autotask PSA REST API with 100% API coverage, TypeScript support, enterprise features, and comprehensive testing.",
   "type": "commonjs",
