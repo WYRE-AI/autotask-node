@@ -44,9 +44,9 @@
     "generate-entities": "ts-node src/tools/entity-generator.ts",
     "setup:integration": "node scripts/setup-integration-tests.js",
     "prepublishOnly": "npm run build",
-    "release:patch": "npm version patch && git push origin main --tags",
-    "release:minor": "npm version minor && git push origin main --tags",
-    "release:major": "npm version major && git push origin main --tags",
+    "release:patch": "npm version patch --no-git-tag-version && node scripts/prepare-release-branch.js patch",
+    "release:minor": "npm version minor --no-git-tag-version && node scripts/prepare-release-branch.js minor",
+    "release:major": "npm version major --no-git-tag-version && node scripts/prepare-release-branch.js major",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -92,14 +92,14 @@
     "cors": "^2.8.6",
     "crypto-js": "^4.2.0",
     "csv-parse": "^7.0.3",
-    "dompurify": "^3.4.16",
+    "dompurify": "^3.4.18",
     "dotenv": "^17.2.3",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.0",
     "glob": "^13.0.6",
     "ioredis": "^5.10.1",
-    "joi": "^18.2.9",
+    "joi": "^18.3.2",
     "jsdom": "^29.1.1",
     "lru-cache": "^11.5.3",
     "ora": "^9.4.1",
@@ -113,7 +113,6 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@semantic-release/changelog": "^7.0.0",
-    "@semantic-release/git": "^11.0.1",
     "@types/bull": "^4.10.4",
     "@types/crypto-js": "^4.2.2",
     "@types/dompurify": "^3.2.0",
@@ -149,16 +148,28 @@
     "registry": "https://npm.pkg.github.com"
   },
   "overrides": {
-    "brace-expansion": "^2.0.1",
+    "brace-expansion": "^2.1.7",
     "diff": "^8.0.3",
-    "@isaacs/brace-expansion": "^5.0.1",
+    "@isaacs/brace-expansion": "^5.0.12",
     "uuid": "^14.0.2",
-    "qs": "^6.16.0",
+    "qs": "^6.17.1",
     "cosmiconfig": {
       "js-yaml": "^4.3.2"
     },
     "@istanbuljs/load-nyc-config": {
       "js-yaml": "^3.15.2"
+    },
+    "proxy-addr": "^2.0.8",
+    "body-parser": "^2.4.0",
+    "follow-redirects": "^1.16.3",
+    "source-map-js": "^1.2.2",
+    "undici": "^6.29.1",
+    "npm": {
+      "brace-expansion": "^5.0.12",
+      "undici": "^6.29.1",
+      "node-gyp": {
+        "undici": "^6.29.1"
+      }
     }
   }
 }
