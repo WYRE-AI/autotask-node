@@ -2,7 +2,7 @@
 
 A TypeScript/Node.js SDK for the Kaseya Autotask PSA REST API with business logic validation, performance optimization, and production monitoring.
 
-[![GitHub package version](https://img.shields.io/github/package-json/v/wyre-technology/autotask-node?label=version)](https://github.com/wyre-technology/autotask-node/packages)
+[![GitHub package version](https://img.shields.io/github/package-json/v/WYRE-AI/autotask-node?label=version)](https://github.com/WYRE-AI/autotask-node/packages)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![API Coverage](https://img.shields.io/badge/API%20Coverage-100%25-brightgreen)](./docs/ENTITIES.md)
@@ -19,22 +19,27 @@ A TypeScript/Node.js SDK for the Kaseya Autotask PSA REST API with business logi
 
 ### Installation
 
-This package is published to GitHub Packages. Configure npm to use GitHub's registry for this package:
+Configure GitHub Packages access in `~/.npmrc` using a GitHub token with `read:packages` permission.
 
-```bash
-# Configure npm to use GitHub Packages for @wyre-technology scope
-echo "@wyre-technology:registry=https://npm.pkg.github.com" >> .npmrc
-
-# Install the package
-npm install @wyre-technology/autotask-node
+```ini
+@wyre-ai:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=<a GitHub token with read:packages>
 ```
 
-**Note**: You may need to authenticate with GitHub Packages. See [GitHub's documentation](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages) for details.
+Install the SDK as a project dependency.
+
+```bash
+npm install @wyre-ai/autotask-node
+```
+
+To install the CLI globally, run `npm install -g @wyre-ai/autotask-node`.
+
+This package was previously published as `@wyre-technology/autotask-node`.
 
 ### Basic Usage
 
 ```typescript
-import { AutotaskClient } from '@wyre-technology/autotask-node';
+import { AutotaskClient } from '@wyre-ai/autotask-node';
 
 // Automatic zone detection - no configuration needed
 const client = await AutotaskClient.create({
@@ -778,7 +783,7 @@ npm run test:coverage       # Coverage report
 5. Submit a pull request
 
 ```bash
-git clone https://github.com/wyre-technology/autotask-node.git
+git clone https://github.com/WYRE-AI/autotask-node.git
 cd autotask-node
 npm install
 cp .env.example .env
@@ -797,7 +802,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/wyre-technology/autotask-node/issues)
+- **Issues**: [GitHub Issues](https://github.com/WYRE-AI/autotask-node/issues)
 - **Documentation**: [docs/](docs/)
 - **Examples**: [docs/EXAMPLES.md](docs/EXAMPLES.md)
 

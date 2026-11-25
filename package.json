@@ -1,5 +1,5 @@
 {
-  "name": "@wyre-technology/autotask-node",
+  "name": "@wyre-ai/autotask-node",
   "version": "2.3.0",
   "description": "Production-ready Node.js SDK for Kaseya Autotask PSA REST API with 100% API coverage, TypeScript support, enterprise features, and comprehensive testing.",
   "type": "commonjs",
@@ -59,11 +59,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wyre-technology/autotask-node.git"
+    "url": "git+https://github.com/WYRE-AI/autotask-node.git"
   },
-  "homepage": "https://github.com/wyre-technology/autotask-node#readme",
+  "homepage": "https://github.com/WYRE-AI/autotask-node#readme",
   "bugs": {
-    "url": "https://github.com/wyre-technology/autotask-node/issues"
+    "url": "https://github.com/WYRE-AI/autotask-node/issues"
   },
   "keywords": [
     "autotask",

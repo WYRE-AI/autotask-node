@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Moved the SDK to `@wyre-ai/autotask-node` on GitHub Packages.
+
 - Repository hygiene: stopped tracking the generated `dist/` build tree in git (`.gitignore` already excludes it).
 - Set `package.json` `author` to `Wyre Technology` (was a placeholder).
 - Added `*.tgz` to `.gitignore` to keep build tarballs out of the working tree.
