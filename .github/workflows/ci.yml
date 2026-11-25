@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
 
 jobs:
   test:
@@ -36,13 +35,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@wyre-ai'
 
       - name: Install dependencies
         run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Verify the integrity of provenance attestations and registry signatures
         run: npm audit signatures
@@ -104,13 +99,9 @@ jobs:
         with:
           node-version: '22.x'
           cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@wyre-ai'
 
       - name: Install dependencies
         run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests with coverage
         run: npm run test:coverage --if-present || npm run test:unit
