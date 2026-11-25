@@ -61,7 +61,7 @@
     "type": "git",
     "url": "git+https://github.com/WYRE-AI/autotask-node.git"
   },
-  "homepage": "https://github.com/wyre-technology/autotask-node#readme",
+  "homepage": "https://github.com/WYRE-AI/autotask-node#readme",
   "bugs": {
     "url": "https://github.com/WYRE-AI/autotask-node/issues"
   },
